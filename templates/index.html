@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>File Upload</title>
+    <script>window.roboassistApiKey="9c2add8c-6841-405f-a4c9-b8e6424bf0ac"</script>
+    <script src="https://script.roboassist.ai/roboassist.js" id="9c2add8c-6841-405f-a4c9-b8e6424bf0ac" defer></script>
+</head>
+<body>
+    <div class="bottom_buttons">
+        <span>Upload Files</span>
+        <form action="/upload" method="POST" enctype="multipart/form-data" name="upload_file">
+            <input type="hidden" name="conversation_id" value="{{chat_id}}">
+            <label for="file">Choose a file:</label>
+            <input type="file" id="file" name="file"><br><br>
+            <label for="chunkSize">Chunk size:</label>
+            <input type="number" id="chunkSize" name="chunkSize" value="1000"><br><br>
+            <button class="bottom_buttons" type="submit"><i>Upload</i></button>
+        </form>
+        <span id="filename"></span>
+    </div>
+</body>
+<script>
+       
+
+    // Example of making an AJAX request using vanilla JavaScript (you can also use libraries like Axios)
+    const form = document.forms.namedItem('upload_file');
+    form.addEventListener('submit', function (ev) {
+        const oData = new FormData(form);
+        oData.set('conversation_id', window.conversation_id);  // Set the conversation ID
+        const oReq = new XMLHttpRequest();
+        oReq.open('POST', "{{url_for('upload')}}", true);
+        oReq.onload = function (oEvent) {
+            if (oReq.status === 200) {
+                const response = JSON.parse(oReq.responseText);
+                handleFileUploadResponse(response);
+            } else {
+                alert('Error ' + oReq.status + ' occurred when trying to upload your file');
+            }
+        };
+        oReq.send(oData);
+        ev.preventDefault();
+    }, false);
+    
+</script>
+</html>
+\
